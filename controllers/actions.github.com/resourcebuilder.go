@@ -12,7 +12,7 @@ import (
 
 	"github.com/actions/actions-runner-controller/apis/actions.github.com/v1alpha1"
 	"github.com/actions/actions-runner-controller/build"
-	listenerconfig "github.com/actions/actions-runner-controller/cmd/githubrunnerscalesetlistener/config"
+	listenerconfig "github.com/actions/actions-runner-controller/cmd/ghalistener/config"
 	"github.com/actions/actions-runner-controller/github/actions"
 	"github.com/actions/actions-runner-controller/hash"
 	"github.com/actions/actions-runner-controller/logging"
@@ -614,7 +614,7 @@ func (b *ResourceBuilder) newEphemeralRunnerPod(ctx context.Context, runner *v1a
 	newPod.Spec.Containers = make([]corev1.Container, 0, len(runner.Spec.PodTemplateSpec.Spec.Containers))
 
 	for _, c := range runner.Spec.PodTemplateSpec.Spec.Containers {
-		if c.Name == EphemeralRunnerContainerName {
+		if c.Name == v1alpha1.EphemeralRunnerContainerName {
 			c.Env = append(
 				c.Env,
 				corev1.EnvVar{

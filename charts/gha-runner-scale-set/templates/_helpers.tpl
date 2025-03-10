@@ -87,7 +87,7 @@ app.kubernetes.io/instance: {{ include "gha-runner-scale-set.scale-set-name" . }
   {{- if eq $val.name "runner" }}
 image: {{ $val.image }}
 command: ["cp"]
-args: ["-r", "-v", "/home/runner/externals/.", "/home/runner/tmpDir/"]
+args: ["-r", "/home/runner/externals/.", "/home/runner/tmpDir/"]
 volumeMounts:
   - name: dind-externals
     mountPath: /home/runner/tmpDir
@@ -136,7 +136,7 @@ volumeMounts:
   {{- range $i, $volume := .Values.template.spec.volumes }}
     {{- if eq $volume.name "work" }}
       {{- $createWorkVolume = 0 }}
-- {{ $volume | toYaml | nindent 2 }}
+- {{ $volume | toYaml | nindent 2 | trim }}
     {{- end }}
   {{- end }}
   {{- if eq $createWorkVolume 1 }}
@@ -150,7 +150,7 @@ volumeMounts:
   {{- range $i, $volume := .Values.template.spec.volumes }}
     {{- if eq $volume.name "work" }}
       {{- $createWorkVolume = 0 }}
-- {{ $volume | toYaml | nindent 2 }}
+- {{ $volume | toYaml | nindent 2 | trim  }}
     {{- end }}
   {{- end }}
   {{- if eq $createWorkVolume 1 }}
@@ -165,7 +165,7 @@ volumeMounts:
 {{- define "gha-runner-scale-set.non-work-volumes" -}}
   {{- range $i, $volume := .Values.template.spec.volumes }}
     {{- if ne $volume.name "work" }}
-- {{ $volume | toYaml | nindent 2 }}
+- {{ $volume | toYaml | nindent 2 | trim }}
     {{- end }}
   {{- end }}
 {{- end }}
@@ -255,7 +255,7 @@ volumeMounts:
         {{- if eq $volMount.name "github-server-tls-cert" }}
           {{- $mountGitHubServerTLS = 0 }}
         {{- end }}
-  - {{ $volMount | toYaml | nindent 4 }}
+  - {{ $volMount | toYaml | nindent 4 | trim }}
       {{- end }}
     {{- end }}
     {{- if $mountWork }}
